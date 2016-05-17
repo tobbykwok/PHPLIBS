@@ -1,9 +1,9 @@
 <?php
 
-abstract class ICache{
-	abstract function Get($key, $expiration = false);
+interface ICache{
+	public function Get($key, $expiration = false);
 	
-	abstract function Set($key, $value);
+	public function Set($key, $value);
 	
-	abstract function Delete($key);
+	public function Delete($key);
 }

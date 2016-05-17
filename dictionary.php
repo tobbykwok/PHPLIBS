@@ -29,7 +29,7 @@ class Dictionary{
 				$data = self::_get_cache_data($id, false, $expiration);
 			}
 		}catch(Exception $e){
-			//log
+			Logger::write($e->message);
 		}
 		
 		return $data;
