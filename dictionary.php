@@ -17,7 +17,7 @@ class Dictionary{
 				}
 			}
 		}
-	}
+	]
 	
 	static public function Get($id){
 		try{
@@ -42,6 +42,28 @@ class Dictionary{
 	
 	static public function SetMatchParam(&$column, &$param, $kname = 'dictionary'){
 		
+	}
+	
+	// 一般是insert/update/delete后执行此方法删除对应缓存内容
+	static public function ClearCache($id){
+		if(strpos($id, '*') !== false) {
+			return self::_clear_match($id);
+		} else {
+			//如果是具体操作某个项($id不含*), 则直接call Cache->delete($id)
+			return self::_cache_instance()->delete(self::_get_key($id));
+		}
+	}
+	
+	// 删除匹配的缓存项(遍历整个文件夹删除匹配的项)
+	static private function _clear_match(&$id){
+		$files = scandir(RUNTIME_PATH.self::$_cache_path);
+		$match = str_replace('*', '', $id);
+		foreach($files as $file){
+			if(strpos($file, $match) !== false) {
+				self::_cache_instance()->delete(self::_get_key($file));
+			}
+		}
+		return true;
 	}
 	
 	// 非键值对缓存数据, 走此方法(读filecache)
