@@ -36,7 +36,10 @@ class Logger{
 	}
 	
 	public static function writeFormat($formatName, $params = [], $priority = LOG_INFO){
-		$message = call_user_func_array("sprintf", array_merge([self::$_formats[$formatName]], array_values($params)));
+		//$message = call_user_func_array("sprintf", array_merge([self::$_formats[$formatName]], array_values($params)));
+		$sprintf_args = array_values($params);
+		array_unshift($sprintf_args, self::$_formats[$formatName]);
+		$message = call_user_func_array("sprintf", $sprintf_args);
 		return ((FALSE === $message)? FALSE : self::write($message, $priority));
 	}
 	
